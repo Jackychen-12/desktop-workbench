@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, FolderKanban, FileText, StickyNote, Trophy, Timer } from "lucide-react";
+import { LayoutDashboard, FolderKanban, FileText, StickyNote, Trophy } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Summary from "./pages/Summary";
@@ -20,36 +20,57 @@ export default function App() {
   const [active, setActive] = useState<TabId>("dashboard");
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <nav className="w-16 bg-surface-2 dark:bg-surface-dark-2 border-r border-gray-200 dark:border-gray-700 flex flex-col items-center py-4 gap-1">
-        <div className="w-9 h-9 rounded-xl bg-brand-500 grid place-items-center mb-4">
-          <span className="text-white text-sm font-bold">W</span>
+    <div className="flex flex-col h-screen">
+      {/* Top bar */}
+      <header className="h-[52px] bg-white border-b border-gray-200 flex items-center px-5 gap-3 flex-shrink-0">
+        <div className="flex items-center gap-1.5 text-blue-500 font-bold text-sm">
+          <div className="w-[22px] h-[22px] bg-blue-500 rounded-md grid place-items-center text-white text-[11px] font-extrabold">W</div>
+          Workbench
         </div>
-        {tabs.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setActive(id)}
-            className={`w-11 h-11 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-colors ${
-              active === id
-                ? "bg-brand-500 text-white"
-                : "text-gray-500 hover:bg-gray-100 dark:hover:bg-surface-dark-3"
-            }`}
-            title={label}
-          >
-            <Icon size={18} />
-            <span className="text-[9px] leading-none">{label}</span>
-          </button>
-        ))}
-      </nav>
+
+        <div className="flex gap-[1px] bg-gray-100 rounded-lg p-0.5 ml-4">
+          {tabs.map(({ id, label }) => (
+            <button
+              key={id}
+              onClick={() => setActive(id)}
+              className={`px-3.5 py-[5px] rounded-md text-[11px] font-medium transition-colors ${
+                active === id
+                  ? "bg-white text-blue-500 font-semibold shadow-sm"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex-1" />
+
+        <div className="flex items-center gap-5">
+          {[
+            { n: "12", l: "commits" }, { n: "3", l: "PRs" },
+            { n: "5", l: "项目" }, { n: "12", l: "连续天" },
+          ].map((s) => (
+            <div key={s.l} className="text-center min-w-[44px]">
+              <div className="text-base font-bold text-gray-800 leading-none">{s.n}</div>
+              <div className="text-[9px] text-gray-400 mt-0.5">{s.l}</div>
+            </div>
+          ))}
+          <div className="w-[30px] h-[30px] rounded-full bg-blue-500 text-white grid place-items-center text-xs font-semibold ml-2">
+            J
+          </div>
+        </div>
+      </header>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto">
-        {active === "dashboard" && <Dashboard />}
-        {active === "projects" && <Projects />}
-        {active === "summary" && <Summary />}
-        {active === "notes" && <Notes />}
-        {active === "motivation" && <Motivation />}
+      <main className="flex-1 overflow-y-auto p-[18px]">
+        <div className="animate-in">
+          {active === "dashboard" && <Dashboard />}
+          {active === "projects" && <Projects />}
+          {active === "summary" && <Summary />}
+          {active === "notes" && <Notes />}
+          {active === "motivation" && <Motivation />}
+        </div>
       </main>
     </div>
   );
